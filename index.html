@@ -1,0 +1,53 @@
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+<title>Servo Tester</title>
+<style type="text/css">
+body {
+	font-family:Comic Sans MS;
+}
+.servo_container {
+	border: 1px solid black;
+	display: inline;
+	position: relative;
+	padding: 5px;
+}
+.servo_label {
+	font-size: 22px;
+	font-weight: bolder;
+	margin: 0 10px 0 10px;
+}
+.servo_slider {
+	width: 300px;
+	position: relative;
+	top: 4px;
+}
+.servo_slider_value {
+	top: -2px;
+	position: relative;
+	border: none;
+}
+</style>
+</head>
+<body>
+<h1>Servo Tester!</h1>
+<div class="servo_container">
+<label class="servo_label">Servo</label><input id="servo_slider" type=range class="servo_slider" min=800 max=2200> <input type="text" id="servo_slider_value" class="servo_slider_value">
+</div>
+<script>
+function sendSliderValue(slider){
+	var oReq = new XMLHttpRequest();
+	oReq.open("POST", "/setServo");
+	oReq.send(JSON.stringify({ sliderValue: slider.value }));
+}
+function syncSlider(slider){
+	document.getElementById('servo_slider_value').value=slider.value;
+}
+var slider = document.getElementById('servo_slider');
+slider.addEventListener('input',function(event){
+	syncSlider(event.target);
+	sendSliderValue(event.target);
+});
+syncSlider(slider);
+</script>
+</body>
